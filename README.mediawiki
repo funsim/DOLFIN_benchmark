@@ -13,18 +13,18 @@ from solver_benchmark import *
 
 To run benchmark one of your "solve" calls, simply change
 
-solve(...) 
+ solve(...) 
 
 to
 
-solve(..., benchmark = True)
+ solve(..., benchmark = True)
 
 The result of the benchmark will be written to STDOUT.
 
 == Exclude a solver/preconditioner ==
 Solvers can be excluded from the benchmark with the optional solver_exclude and preconditioner arguments, e.g.
 
-solve(..., benchmark = True, solver_exclude = ['lu', 'cg'], preconditioner_exclude = ['ilu'])
+ solve(..., benchmark = True, solver_exclude = ['lu', 'cg'], preconditioner_exclude = ['ilu'])
 
 == Example == 
 Run demo_poisson.py to see an example.
