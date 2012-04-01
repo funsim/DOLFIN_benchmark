@@ -1,7 +1,7 @@
 import dolfin
 
 def solver_parameters(solver_exclude, preconditioner_exclude):
-    linear_solver_set = ["lu", "gmres", "bicgstab", "minres", "tfqmr", "richardson"]
+    linear_solver_set = ["lu", "gmres", "bicgstab", "minres", "tfqmr", "richardson", "cg"]
     preconditioner_set =["none", "ilu", "icc", "jacobi", "bjacobi", "sor", "amg", "additive_schwarz", "hypre_amg", "hypre_euclid", "hypre_parasails"]
 
     solver_parameters_set = []
