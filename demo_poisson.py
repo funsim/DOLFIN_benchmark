@@ -35,7 +35,7 @@ du/dn(x, y) = sin(5*x) for y = 0 or y = 1
 # Begin demo
 
 from dolfin import *
-from benchmark.solver_benchmark import *
+from solver_benchmark import *
 
 # Create mesh and define function space
 mesh = UnitSquare(32, 32)
@@ -59,7 +59,7 @@ L = f*v*dx + g*v*ds
 
 # Compute solution
 u = Function(V)
-solve(a == L, u, bc)
+solve(a == L, u, bc, benchmark = True)
 
 # Save solution in VTK format
 file = File("poisson.pvd")
