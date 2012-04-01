@@ -21,6 +21,14 @@ solve(..., benchmark = True)
 
 The result of the benchmark will be written to STDOUT.
 
+== Exclude a solver/preconditioner ==
+Solvers can be excluded from the benchmark with the optional solver_exclude and preconditioner arguments, e.g.
+
+solve(..., benchmark = True, solver_exclude = ['lu', 'cg'], preconditioner_exclude = ['ilu'])
+
 == Example == 
 Run demo_poisson.py to see an example.
 
+== How to contribute == 
+
+Fork the project, make your changes and request a merge. Simple. 
