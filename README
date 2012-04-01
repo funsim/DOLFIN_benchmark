@@ -1,11 +1,11 @@
-**************** What is DOLFIN_benchmark ******************
+== What is DOLFIN_benchmark == 
 
 DOLFIN_benchmark allows to automatically benchmark various solver/preconditioner options in the Python interface to FEniCS/DOLFIN.
 
 It works by overwritting the dolfin.solver and solving the same problem with various different solvers/preconditioners. 
 The resulting timings are then sorted and the result is reported.
 
-**************** Usage ******************
+== Usage == 
 
 Copy the file "solver_benchmark.py" in your project directory and import the module in your solver file with:
 
@@ -21,6 +21,6 @@ solve(..., benchmark = True)
 
 The result of the benchmark will be written to STDOUT.
 
-**************** Example ******************
+== Example == 
 Run demo_poisson.py to see an example.
 
