@@ -4,6 +4,30 @@ DOLFIN_benchmark allows to automatically benchmark various solver/preconditioner
 
 It works by overwritting the dolfin.solver and solving the same problem with various different solvers/preconditioners. 
 The resulting timings are then sorted and the result is reported.
+A typical benchmark report looks like this:
+
+    ***********************************************
+    ********** Solver benchmark results: **********
+    ***********************************************
+    cg, amg: 0.98 s
+    cg, hypre_amg: 0.98 s
+    gmres, amg: 0.99 s
+    tfqmr, amg: 1.00 s
+    .
+    .
+    .
+    gmres, icc: 13.23 s
+    gmres, sor: 14.21 s
+    gmres, hypre_parasails: 16.72 s
+    gmres, jacobi: 37.94 s
+    richardson, sor: 42.80 s
+    richardson, default: diverged
+    richardson, hypre_parasails: diverged
+    minres, hypre_parasails: diverged
+    tfqmr, icc: diverged
+    .
+    .
+    .
 
 == Usage == 
 
@@ -35,30 +59,6 @@ Run demo_poisson.py or demo_navier-stokes.py to see an example.
 
 == Known bugs and limitations ==
 Adaptive solves, i.e solve calls that use the 'tol' argument, are currently not supported. But there is no reason why not, see the "How to contribute section.
-A typical benchmark report looks like this:
-
-    ***********************************************
-    ********** Solver benchmark results: **********
-    ***********************************************
-    cg, amg: 0.98 s
-    cg, hypre_amg: 0.98 s
-    gmres, amg: 0.99 s
-    tfqmr, amg: 1.00 s
-    .
-    .
-    .
-    gmres, icc: 13.23 s
-    gmres, sor: 14.21 s
-    gmres, hypre_parasails: 16.72 s
-    gmres, jacobi: 37.94 s
-    richardson, sor: 42.80 s
-    richardson, default: diverged
-    richardson, hypre_parasails: diverged
-    minres, hypre_parasails: diverged
-    tfqmr, icc: diverged
-    .
-    .
-    .
 
 == How to contribute == 
 
