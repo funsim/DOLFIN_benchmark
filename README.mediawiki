@@ -21,6 +21,10 @@ to
 
 The result of the benchmark will be written to STDOUT.
 
+Sometimes you will see error messages like:
+ PETSC ERROR: Unable to find requested PC type ml!
+In that case, it is best to exclude this solver/preconditioner manually, see the next section.
+
 == Exclude a solver/preconditioner ==
 Solvers can be excluded from the benchmark with the optional solver_exclude and preconditioner arguments, e.g.
 
@@ -29,6 +33,10 @@ Solvers can be excluded from the benchmark with the optional solver_exclude and 
 == Example == 
 Run demo_poisson.py or demo_navier-stokes.py to see an example.
 
+== Known bugs and limitations ==
+Adaptive solves (solve calls that use the 'tol' argument) are currently not supported (But there is no reason why not, see the "How to contribute section).
+
 == How to contribute == 
 
 Fork the project, make your changes and request a merge. Simple. 
+
