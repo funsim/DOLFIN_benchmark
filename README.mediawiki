@@ -25,9 +25,6 @@ A typical benchmark report looks like this:
     richardson, hypre_parasails: diverged
     minres, hypre_parasails: diverged
     tfqmr, icc: diverged
-    .
-    .
-    .
 
 == Usage == 
 
