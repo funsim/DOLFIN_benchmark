@@ -27,7 +27,7 @@ Solvers can be excluded from the benchmark with the optional solver_exclude and 
  solve(..., benchmark = True, solver_exclude = ['lu', 'cg'], preconditioner_exclude = ['ilu'])
 
 == Example == 
-Run demo_poisson.py to see an example.
+Run demo_poisson.py or demo_navier-stokes.py to see an example.
 
 == How to contribute == 
 
