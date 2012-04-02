@@ -9,7 +9,7 @@ The resulting timings are then sorted and the result is reported.
 
 Copy the file "solver_benchmark.py" in your project directory and import the module in your solver file with:
 
-from solver_benchmark import *
+ from solver_benchmark import *
 
 To run benchmark one of your "solve" calls, simply change
 

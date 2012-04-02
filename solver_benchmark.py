@@ -1,4 +1,5 @@
 import dolfin
+import ufl
 
 def solver_parameters(solver_exclude, preconditioner_exclude):
     linear_solver_set = ["lu", "gmres", "bicgstab", "minres", "tfqmr", "richardson", "cg"]
@@ -37,6 +38,26 @@ def print_benchmark_results(solver_benchmark_results):
         for i in range(len(times)):
             dolfin.info_blue("%s, %s: %.2f s" % (str(solvers[i]['linear_solver']), str(solvers[i]['preconditioner']), times[i]))
 
+
+def replace_solver_settings(args, kwargs, parameters):
+    ''' Replace the arguments of a solve call and replace the solver settings with the ones given in solver_settings. '''
+
+    # The way how to set the solver settings depends on how the system is solved:
+    #  Adaptive solve 
+    if "tol" in kwargs:
+        raise NotImplementedError, 'The benchmark solver is currently not implemented for adaptive solver calls.'
+
+    # Variational problem solver 
+    elif isinstance(args[0], ufl.classes.Equation):
+        kwargs['solver_parameters'] = parameters
+
+    # Default case: call the c++ solve routine
+    else:
+        args = args[0:3] + (parameters['linear_solver'], parameters['preconditioner'])
+
+    return args, kwargs
+
+
 def solve(*args, **kwargs):
     ''' This function overwrites the dolfin.solve function but provides additional functionality to benchmark 
         different solver/preconditioner settings. The arguments of equivalent to dolfin.solve except some (optional) additional parameters:
@@ -73,6 +94,7 @@ def solve(*args, **kwargs):
         dolfin.info_blue("Running solver benchmark...")
         solver_parameters_set = solver_parameters(solver_exclude, preconditioner_exclude)
         solver_benchmark_results = {}
+        ret = None
 
         # Perform the benchmark
         for parameters in solver_parameters_set:
@@ -81,8 +103,10 @@ def solve(*args, **kwargs):
             timer.start()
 
             try:
-                ret = solve(*args, **kwargs)
-            except RunTimeError:
+                # Replace the existing solver setting with the benchmark one's.
+                new_args, new_kwargs = replace_solver_settings(args, kwargs, parameters) 
+                ret = solve(*new_args, **new_kwargs)
+            except RuntimeError:
                 solver_failed = True
                 pass
 

@@ -41,6 +41,8 @@ from solver_benchmark import *
 mesh = UnitSquare(32, 32)
 V = FunctionSpace(mesh, "Lagrange", 1)
 
+set_log_level(20)
+
 # Define Dirichlet boundary (x = 0 or x = 1)
 def boundary(x):
     return x[0] < DOLFIN_EPS or x[0] > 1.0 - DOLFIN_EPS
