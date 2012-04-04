@@ -1,6 +1,14 @@
 import dolfin
 import ufl
 import operator
+import sys
+import signal
+
+class TimeoutException(Exception): 
+        pass 
+
+def timeout_handler(signum, frame):
+            raise TimeoutException()
 
 def solver_parameters(solver_exclude, preconditioner_exclude):
     linear_solver_set = ["lu"] 
@@ -53,13 +61,13 @@ def replace_solver_settings(args, kwargs, parameters):
 
 def solve(*args, **kwargs):
     ''' This function overwrites the dolfin.solve function but provides additional functionality to benchmark 
-        different solver/preconditioner settings. The arguments of equivalent to dolfin.solve except some (optional) additional parameters:
+        different solver/preconditioner settings. The arguments of equivalent to dolfin.solve except following additional optional parameters:
         - benchmark = [True, False]: If True, the problem will be solved with all different solver/precondition combinations and the results reported.
                                      If False, the problem is solved using the default solver settings.
         - solve: An optional function parameter that is called instead of dolfin.solve. This parameter is useful if dolfin.solve is overwritten by a custom solver routine.
         - solver_exclude: A list of solvers that are to be excluded from the benchmark.
         - preconditioner_exclude: A list of preconditioners that are to be excluded from the benchmark.
-
+        - timeout: A timeout in seconds after which a solver/preconditioner try will be aborted. 
     '''
 
     # Retrieve the extended benchmark arguments.
@@ -83,6 +91,11 @@ def solve(*args, **kwargs):
     else:
         preconditioner_exclude = [] 
 
+    if kwargs.has_key('timeout'):
+        timeout = kwargs.pop('timeout')
+    else:
+        timeout = 0 
+
     if benchmark: 
         dolfin.info_blue("Running solver benchmark...")
         solver_parameters_set = solver_parameters(solver_exclude, preconditioner_exclude)
@@ -96,6 +109,10 @@ def solve(*args, **kwargs):
             # Replace the existing solver setting with the benchmark one's.
             new_args, new_kwargs = replace_solver_settings(args, kwargs, parameters) 
 
+            # Set up the timeout handler
+            old_handler = signal.signal(signal.SIGALRM, timeout_handler)
+            signal.alarm(timeout) 
+
             # Solve the problem
             timer = dolfin.Timer("Solver benchmark")
             timer.start()
@@ -107,16 +124,19 @@ def solve(*args, **kwargs):
                     failure_reason = 'diverged'
                 else:
                     failure_reason = 'unknown'
-                    from IPython.Shell import IPShellEmbed
-                    ipshell = IPShellEmbed()
-                    ipshell()
                 pass
+            except TimeoutException:
+                solver_failed = True
+                failure_reason = 'timeout'
+            finally:
+                signal.signal(signal.SIGALRM, old_handler) 
             timer.stop()
+            signal.alarm(0)
 
             # Save the result
             parameters_str = parameters["linear_solver"] + ", " + parameters["preconditioner"]
             if solver_failed:
-                dolfin.info_red(parameters_str + ": solver failed.")
+                dolfin.info_red("%s: solver failed. Reason: %s." % (parameters_str, failure_reason))
                 failed_solvers[parameters_str] = failure_reason 
             else:
                 dolfin.info(parameters_str + ": " + str(timer.value()) + "s.")

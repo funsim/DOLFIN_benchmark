@@ -106,7 +106,7 @@ while t < T + DOLFIN_EPS:
     begin("Computing tentative velocity")
     b1 = assemble(L1)
     [bc.apply(A1, b1) for bc in bcu]
-    solve(A1, u1.vector(), b1, "gmres", "amg", benchmark = True)
+    solve(A1, u1.vector(), b1, "gmres", "amg", benchmark = True, timeout = 1)
     end()
 
     # Pressure correction
