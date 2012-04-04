@@ -107,9 +107,6 @@ def solve(*args, **kwargs):
                     failure_reason = 'diverged'
                 else:
                     failure_reason = 'unknown'
-                    from IPython.Shell import IPShellEmbed
-                    ipshell = IPShellEmbed()
-                    ipshell()
                 pass
             timer.stop()
 
